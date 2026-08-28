@@ -51,14 +51,14 @@ dave-diver-wedding-invitation/
 └── LICENSE                  # 原创代码 MIT 许可
 ```
 
-## 发布到 GitHub Pages
+## 可选：发布到 GitHub Pages
 
-仓库已经自带自动部署文件 `.github/workflows/deploy-pages.yml`。首次开启时，进入仓库：
+如果你想把自己定制后的版本发布到 GitHub Pages，进入仓库：
 
 1. 点击 **Settings**。
 2. 左侧点击 **Pages**。
-3. 在 **Build and deployment** 中选择 **GitHub Actions**。
-4. 保存后，到 **Actions** 页面重新运行一次 `Deploy demo to GitHub Pages` 工作流（以后每次提交到 `main` 都会自动发布）。
+3. 在 **Build and deployment** 中选择 **Deploy from a branch**。
+4. 分支选择 `main`，目录选择 `/ (root)`，然后保存。
 
 稍等几分钟，网站通常会发布到：
 
