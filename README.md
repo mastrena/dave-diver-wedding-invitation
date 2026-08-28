@@ -4,7 +4,7 @@
 
 无需安装框架或运行构建命令，项目只使用 HTML、CSS 和 JavaScript。完全没有编程经验，也可以按照教程替换成自己的内容。
 
-> 🌊 [立即体验在线 Demo](https://mastrena.github.io/dave-diver-wedding-invitation/)
+> 🌊 [立即体验在线 Demo](https://blue-hole-wedding-invitation-demo.pages.dev/)
 
 ## 页面包含什么
 
