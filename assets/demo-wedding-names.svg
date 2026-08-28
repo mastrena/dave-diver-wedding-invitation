@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 430" role="img" aria-labelledby="title desc">
+  <title id="title">新郎与新娘</title>
+  <desc id="desc">公开演示使用的虚拟新人姓名图形</desc>
+  <defs>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff25b"/>
+      <stop offset=".55" stop-color="#ffd324"/>
+      <stop offset="1" stop-color="#ffad18"/>
+    </linearGradient>
+  </defs>
+  <g font-family="Arial Black,Microsoft YaHei,sans-serif" font-weight="900" text-anchor="middle" stroke-linejoin="round">
+    <text x="610" y="210" font-size="190" fill="#006cb1" stroke="#006cb1" stroke-width="36">新郎 &amp; 新娘</text>
+    <text x="600" y="195" font-size="190" fill="url(#gold)" stroke="#fff0a8" stroke-width="5">新郎 &amp; 新娘</text>
+    <text x="608" y="375" font-size="96" letter-spacing="18" fill="#043b70" stroke="#ffe53b" stroke-width="16">GROOM • BRIDE</text>
+    <text x="600" y="363" font-size="96" letter-spacing="18" fill="#086ca6" stroke="#fff4a8" stroke-width="3">GROOM • BRIDE</text>
+  </g>
+</svg>
