@@ -76,12 +76,21 @@ dave-diver-wedding-invitation/
 ├── assets/                  # 图片与视觉素材
 ├── GUIDE.zh-CN.md           # 零基础定制与部署教程
 ├── SHARE.zh-CN.md           # 分享给亲朋好友的完整教程
+├── AI_PUBLISH_GUIDE.zh-CN.md  # 用 AI 工具一句话生成分享网址
 ├── COPYRIGHT_NOTICE.md      # 版权边界与降低风险建议
 ├── THIRD_PARTY_ASSETS.md    # 第三方素材清单
 └── LICENSE                  # 原创代码 MIT 许可
 ```
 
-## 可选：发布到 GitHub Pages
+## 发布成网址：两种方式选一种
+
+### 方式一：让 AI 工具帮你发布（不懂技术首选）
+
+不需要注册账号，也不需要理解 Git。把项目文件夹交给 WorkBuddy、豆包桌面版或百度秒哒，说一句「发布上线，生成一个可以分享的网址」，就能拿到 HTTPS 链接。三条路线的详细步骤、可直接复制的提示词和排错清单见：
+
+> 🚀 [用 AI 工具一句话生成分享网址](./AI_PUBLISH_GUIDE.zh-CN.md)
+
+### 方式二：发布到 GitHub Pages（想自己掌控）
 
 如果你想把自己定制后的版本发布到 GitHub Pages，进入仓库：
 
@@ -110,6 +119,8 @@ https://你的用户名.github.io/仓库名/
 完整步骤、微信分享卡片说明、二维码检查方法和可直接复制的邀请文案见：
 
 > 💌 [做好邀请函后，如何分享给亲朋好友](./SHARE.zh-CN.md)
+
+网址交给 AI 工具生成的，发布后同样按上面四步检查；AI 生成页面的常见坑见 [AI 发布教程第七节](./AI_PUBLISH_GUIDE.zh-CN.md#七排错速查)。
 
 ## 版权与非官方声明
 
