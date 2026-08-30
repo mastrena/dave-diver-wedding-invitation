@@ -8,6 +8,7 @@
     <meta property="og:type" content="website" />
     <meta property="og:title" content="BLUE HOLE WEDDING｜互动婚礼请柬 Demo" />
     <meta property="og:description" content="潜入蓝洞，接受一场关于爱与相聚的特别委托。" />
+    <meta property="og:url" content="https://blue-hole-wedding-invitation-demo.pages.dev/" />
     <meta property="og:image" content="https://mastrena.github.io/dave-diver-wedding-invitation/assets/wedding-invitation-logo.png" />
     <meta property="og:image:alt" content="WEDDING INVITATION" />
     <meta name="twitter:card" content="summary_large_image" />
@@ -15,6 +16,7 @@
     <meta name="twitter:description" content="潜入蓝洞，接受一场关于爱与相聚的特别委托。" />
     <meta name="twitter:image" content="https://mastrena.github.io/dave-diver-wedding-invitation/assets/wedding-invitation-logo.png" />
     <title>BLUE HOLE WEDDING｜互动婚礼请柬 Demo</title>
+    <link rel="canonical" href="https://blue-hole-wedding-invitation-demo.pages.dev/" />
     <link rel="icon" type="image/png" href="./assets/wedding-invitation-logo.png" />
     <link rel="stylesheet" href="./style.css" />
     <script type="module" src="./app.js"></script>
@@ -69,7 +71,7 @@
             <article class="crew-slide" data-name="COBRA"><img src="./assets/cobra.webp" alt="柯布拉角色介绍" /><p><b>COBRA</b>“船已备好，坐标已确认。10月1日，我们在深海厅集合！”</p></article>
             <article class="crew-slide" data-name="BACON"><img src="./assets/bacon.webp" alt="培根博士角色介绍" /><p><b>DR. BACON</b>“根据我的研究，这将是蓝洞幸福指数最高的一天。请务必亲自参与观察。”</p></article>
           </div>
-          <div class="crew-controls"><button type="button" data-crew="prev">◀</button><output id="crew-name">DAVE · 1/4</output><button type="button" data-crew="next">▶</button></div>
+          <div class="crew-controls"><button type="button" data-crew="prev" aria-label="上一位小队成员">◀</button><output id="crew-name">DAVE · 1/4</output><button type="button" data-crew="next" aria-label="下一位小队成员">▶</button></div>
         </div>
       </section>
 
@@ -90,14 +92,14 @@
         <article class="map-console reveal">
           <div class="map-grid" aria-hidden="true"></div><div class="map-pulse" aria-hidden="true"><i></i><b>♥</b></div>
           <p class="coordinate">DEMO COORDINATE</p><h3>示例市 蓝湾婚礼中心 深海厅</h3><p>本页面为公开演示，实际使用时请替换为你的交通信息</p>
-          <a href="https://ditu.amap.com/" rel="noreferrer">打开高德地图 <span>↗</span></a>
+          <a href="https://ditu.amap.com/" target="_blank" rel="noopener noreferrer">打开高德地图 <span>↗</span></a>
         </article>
       </section>
 
       <section class="rsvp-section story-section" id="rsvp">
         <header class="section-title reveal"><span>05</span><div><p>IDIVER APP · GUEST REGISTRATION</p><h2>登记潜水小队</h2></div></header>
         <div class="rsvp-phone reveal">
-          <div class="app-bar"><span>◉</span><b>WEDDING MISSION</b><small>ONLINE</small></div>
+          <div class="app-bar"><span>◉</span><b>WEDDING MISSION</b><small>LOCAL DEMO</small></div>
           <form id="rsvp-form" novalidate>
             <p class="demo-notice">DEMO MODE · 登记内容只保存在当前浏览器，不会上传到服务器</p>
             <label><span>宾客姓名 <b>*</b></span><input name="guestName" maxlength="30" autocomplete="name" required placeholder="请输入姓名" /></label>
@@ -109,6 +111,7 @@
             <p class="form-error" id="rsvp-error" role="alert" hidden></p><button class="submit-button" type="submit"><span>保存赴约信息</span><b>▶</b></button>
           </form>
           <div class="rsvp-success" id="rsvp-success" tabindex="-1" hidden><div class="success-radar"><i></i><b>✓</b></div><h3 id="rsvp-success-title">登记成功</h3><p id="rsvp-success-summary"></p><button id="rsvp-edit" type="button">修改登记信息</button></div>
+          <div class="rsvp-external" id="rsvp-external" hidden><div class="success-radar"><i></i><b>↗</b></div><h3>宾客登记已开启</h3><p>点击下方按钮填写赴约信息。提交后，新人可以在表单后台统一查看和导出名单。</p><a id="rsvp-external-link" href="#" target="_blank" rel="noopener noreferrer">填写赴约信息 <span>↗</span></a></div>
         </div>
       </section>
 

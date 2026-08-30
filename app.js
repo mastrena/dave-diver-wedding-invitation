@@ -1,4 +1,6 @@
 const weddingDate = new Date('2030-10-01T11:58:00+08:00')
+// 需要真实收集宾客名单时，只需粘贴第三方表单的公开填写链接；留空则保持本地演示模式。
+const RSVP_FORM_URL = ''
 document.querySelector('#days-count').textContent = String(Math.max(0, Math.ceil((weddingDate.getTime() - Date.now()) / 86400000)))
 
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -42,7 +44,7 @@ const questStatus = document.querySelector('#quest-status')
 const missionComplete = document.querySelector('#mission-complete')
 let holdTimer
 function startHold() {
-  if (missionCard.classList.contains('is-accepted')) return
+  if (missionCard.classList.contains('is-accepted') || missionCard.classList.contains('is-holding')) return
   missionCard.classList.add('is-holding')
   holdTimer = window.setTimeout(() => {
     missionCard.classList.remove('is-holding')
@@ -59,7 +61,11 @@ acceptButton.addEventListener('pointerdown', startHold)
 acceptButton.addEventListener('pointerup', cancelHold)
 acceptButton.addEventListener('pointerleave', cancelHold)
 acceptButton.addEventListener('pointercancel', cancelHold)
-acceptButton.addEventListener('keydown', (event) => { if (event.key === 'Enter' || event.key === ' ') startHold() })
+acceptButton.addEventListener('keydown', (event) => {
+  if (event.key !== 'Enter' && event.key !== ' ') return
+  event.preventDefault()
+  startHold()
+})
 acceptButton.addEventListener('keyup', cancelHold)
 
 const sonarField = document.querySelector('.sonar-field')
@@ -130,6 +136,8 @@ async function playMusic() {
     setMusicState(true)
   } catch {
     setMusicState(false)
+    musicHint.textContent = '音乐加载失败，请检查网络后重试'
+    musicHint.classList.remove('is-hidden')
   }
 }
 function pauseMusic() { officialBgm.pause(); setMusicState(false) }
@@ -137,48 +145,61 @@ musicToggle.addEventListener('click', () => musicPlaying ? pauseMusic() : playMu
 document.querySelector('#start-mission').addEventListener('click', () => { playMusic(); document.querySelector('#briefing').scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth' }) })
 
 const rsvpForm = document.querySelector('#rsvp-form')
-const accommodationDates = document.querySelector('#accommodation-dates')
-const accommodationField = document.querySelector('#accommodation-field')
-const messageField = rsvpForm.elements.message
-const messageCount = document.querySelector('#message-count')
-const rsvpError = document.querySelector('#rsvp-error')
 const rsvpSuccess = document.querySelector('#rsvp-success')
-const rsvpSuccessTitle = document.querySelector('#rsvp-success-title')
-const rsvpSuccessSummary = document.querySelector('#rsvp-success-summary')
-const rsvpSubmit = rsvpForm.querySelector('[type="submit"]')
-const storageKey = 'dave-wedding-demo-rsvp'
-let savedRsvp
-try { savedRsvp = JSON.parse(localStorage.getItem(storageKey)) } catch { savedRsvp = undefined }
-function updateAccommodation() {
-  const needed = rsvpForm.elements.needsAccommodation.value === 'yes'
-  accommodationDates.hidden = !needed; rsvpForm.elements.checkInAt.required = needed; rsvpForm.elements.checkOutAt.required = needed
-  if (needed) { rsvpForm.elements.checkInAt.value ||= '2030-09-30T14:00'; rsvpForm.elements.checkOutAt.value ||= '2030-10-01T12:00' }
+const rsvpExternal = document.querySelector('#rsvp-external')
+const rsvpExternalLink = document.querySelector('#rsvp-external-link')
+const rsvpStatus = document.querySelector('.rsvp-phone .app-bar small')
+const publicRsvpUrl = RSVP_FORM_URL.trim()
+
+if (publicRsvpUrl) {
+  rsvpForm.hidden = true
+  rsvpSuccess.hidden = true
+  rsvpExternal.hidden = false
+  rsvpExternalLink.href = publicRsvpUrl
+  rsvpStatus.textContent = 'ONLINE'
+} else if (rsvpForm) {
+  const accommodationDates = document.querySelector('#accommodation-dates')
+  const accommodationField = document.querySelector('#accommodation-field')
+  const messageField = rsvpForm.elements.message
+  const messageCount = document.querySelector('#message-count')
+  const rsvpError = document.querySelector('#rsvp-error')
+  const rsvpSuccessTitle = document.querySelector('#rsvp-success-title')
+  const rsvpSuccessSummary = document.querySelector('#rsvp-success-summary')
+  const rsvpSubmit = rsvpForm.querySelector('[type="submit"]')
+  const storageKey = 'dave-wedding-demo-rsvp'
+  let savedRsvp
+  try { savedRsvp = JSON.parse(localStorage.getItem(storageKey)) } catch { savedRsvp = undefined }
+  function updateAccommodation() {
+    const needed = rsvpForm.elements.needsAccommodation.value === 'yes'
+    accommodationDates.hidden = !needed; rsvpForm.elements.checkInAt.required = needed; rsvpForm.elements.checkOutAt.required = needed
+    if (needed) { rsvpForm.elements.checkInAt.value ||= '2030-09-30T14:00'; rsvpForm.elements.checkOutAt.value ||= '2030-10-01T12:00' }
+  }
+  function fillRsvp(data) {
+    if (!data) return
+    rsvpForm.elements.guestName.value = data.guestName || ''; rsvpForm.elements.partySize.value = String(data.partySize || 1); rsvpForm.elements.phone.value = data.phone || ''; rsvpForm.elements.message.value = data.message || ''
+    const choice = rsvpForm.querySelector(`[name="needsAccommodation"][value="${data.needsAccommodation ? 'yes' : 'no'}"]`); if (choice) choice.checked = true
+    rsvpForm.elements.checkInAt.value = data.checkInAt || '2030-09-30T14:00'; rsvpForm.elements.checkOutAt.value = data.checkOutAt || '2030-10-01T12:00'; messageCount.value = String(rsvpForm.elements.message.value.length); updateAccommodation()
+  }
+  function showRsvpError(message) { rsvpError.textContent = message; rsvpError.hidden = false }
+  function collectRsvp() {
+    const formData = new FormData(rsvpForm); const guestName = String(formData.get('guestName') || '').trim(); const needsAccommodation = formData.get('needsAccommodation') === 'yes'; const checkInAt = String(formData.get('checkInAt') || ''); const checkOutAt = String(formData.get('checkOutAt') || '')
+    if (!guestName) throw new Error('请填写宾客姓名。'); if (needsAccommodation && (!checkInAt || !checkOutAt)) throw new Error('请填写完整的住宿时间。'); if (needsAccommodation && checkOutAt <= checkInAt) throw new Error('退房时间必须晚于入住时间。')
+    return { id: savedRsvp?.id, editToken: savedRsvp?.editToken, guestName, partySize: Number(formData.get('partySize')), needsAccommodation, checkInAt: needsAccommodation ? checkInAt : null, checkOutAt: needsAccommodation ? checkOutAt : null, phone: String(formData.get('phone') || '').trim(), message: String(formData.get('message') || '').trim() }
+  }
+  rsvpForm.addEventListener('change', (event) => { if (event.target.name === 'needsAccommodation') { accommodationField.removeAttribute('aria-invalid'); updateAccommodation() } })
+  messageField.addEventListener('input', () => { messageCount.value = String(messageField.value.length) })
+  rsvpForm.addEventListener('submit', async (event) => {
+    event.preventDefault(); rsvpError.hidden = true
+    let submission
+    try { submission = collectRsvp() } catch (error) { showRsvpError(error.message); return }
+    rsvpSubmit.disabled = true; rsvpSubmit.querySelector('span').textContent = '正在保存演示登记……'
+    try {
+      savedRsvp = { ...submission, id: 'demo-local-only', editToken: undefined }
+      localStorage.setItem(storageKey, JSON.stringify(savedRsvp))
+      rsvpForm.hidden = true; rsvpSuccess.hidden = false; rsvpSuccessTitle.textContent = `${submission.guestName}，演示登记成功`; rsvpSuccessSummary.textContent = `已在本机保存 ${submission.partySize} 人的演示记录${submission.needsAccommodation ? ' · 已登记住宿需求' : ' · 无需住宿'}；这些内容不会上传。`; rsvpSuccess.focus({ preventScroll: true })
+    } catch (error) { showRsvpError(error.message || '保存失败，请检查浏览器设置后重试。') }
+    finally { rsvpSubmit.disabled = false; rsvpSubmit.querySelector('span').textContent = '保存赴约信息' }
+  })
+  document.querySelector('#rsvp-edit').addEventListener('click', () => { fillRsvp(savedRsvp); rsvpForm.hidden = false; rsvpSuccess.hidden = true })
+  fillRsvp(savedRsvp)
 }
-function fillRsvp(data) {
-  if (!data) return
-  rsvpForm.elements.guestName.value = data.guestName || ''; rsvpForm.elements.partySize.value = String(data.partySize || 1); rsvpForm.elements.phone.value = data.phone || ''; rsvpForm.elements.message.value = data.message || ''
-  const choice = rsvpForm.querySelector(`[name="needsAccommodation"][value="${data.needsAccommodation ? 'yes' : 'no'}"]`); if (choice) choice.checked = true
-  rsvpForm.elements.checkInAt.value = data.checkInAt || '2030-09-30T14:00'; rsvpForm.elements.checkOutAt.value = data.checkOutAt || '2030-10-01T12:00'; messageCount.value = String(rsvpForm.elements.message.value.length); updateAccommodation()
-}
-function showRsvpError(message) { rsvpError.textContent = message; rsvpError.hidden = false }
-function collectRsvp() {
-  const formData = new FormData(rsvpForm); const guestName = String(formData.get('guestName') || '').trim(); const needsAccommodation = formData.get('needsAccommodation') === 'yes'; const checkInAt = String(formData.get('checkInAt') || ''); const checkOutAt = String(formData.get('checkOutAt') || '')
-  if (!guestName) throw new Error('请填写宾客姓名。'); if (needsAccommodation && (!checkInAt || !checkOutAt)) throw new Error('请填写完整的住宿时间。'); if (needsAccommodation && checkOutAt <= checkInAt) throw new Error('退房时间必须晚于入住时间。')
-  return { id: savedRsvp?.id, editToken: savedRsvp?.editToken, guestName, partySize: Number(formData.get('partySize')), needsAccommodation, checkInAt: needsAccommodation ? checkInAt : null, checkOutAt: needsAccommodation ? checkOutAt : null, phone: String(formData.get('phone') || '').trim(), message: String(formData.get('message') || '').trim() }
-}
-rsvpForm.addEventListener('change', (event) => { if (event.target.name === 'needsAccommodation') { accommodationField.removeAttribute('aria-invalid'); updateAccommodation() } })
-messageField.addEventListener('input', () => { messageCount.value = String(messageField.value.length) })
-rsvpForm.addEventListener('submit', async (event) => {
-  event.preventDefault(); rsvpError.hidden = true
-  let submission
-  try { submission = collectRsvp() } catch (error) { showRsvpError(error.message); return }
-  rsvpSubmit.disabled = true; rsvpSubmit.querySelector('span').textContent = '正在保存演示登记……'
-  try {
-    savedRsvp = { ...submission, id: 'demo-local-only', editToken: undefined }
-    localStorage.setItem(storageKey, JSON.stringify(savedRsvp))
-    rsvpForm.hidden = true; rsvpSuccess.hidden = false; rsvpSuccessTitle.textContent = `${submission.guestName}，演示登记成功`; rsvpSuccessSummary.textContent = `已在本机保存 ${submission.partySize} 人的演示记录${submission.needsAccommodation ? ' · 已登记住宿需求' : ' · 无需住宿'}；这些内容不会上传。`; rsvpSuccess.focus({ preventScroll: true })
-  } catch (error) { showRsvpError(error.message || '网络开小差了，请稍后再试。') }
-  finally { rsvpSubmit.disabled = false; rsvpSubmit.querySelector('span').textContent = '保存赴约信息' }
-})
-document.querySelector('#rsvp-edit').addEventListener('click', () => { fillRsvp(savedRsvp); rsvpForm.hidden = false; rsvpSuccess.hidden = true })
-fillRsvp(savedRsvp)
