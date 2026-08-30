@@ -22,7 +22,7 @@
 
 仓库里的宾客登记是安全的演示模式。访客填写的信息只保存在访客自己的浏览器中，不会发送到服务器，也不会进入新人的正式宾客名单。
 
-如需接入真实登记后台，请阅读 [新手定制教程](./GUIDE.zh-CN.md#九宾客登记如何变成真的)。
+如需接入真实登记后台，请阅读 [新手定制教程](./GUIDE.zh-CN.md#九宾客登记如何变成真的)，或直接按 [后台宾客管理接入教程](./RSVP_BACKEND.zh-CN.md) 用第三方表单零代码搭建。
 
 ## 三分钟开始
 
@@ -75,6 +75,7 @@ dave-diver-wedding-invitation/
 ├── app.js                   # 倒计时、音乐、鱼群、长按、登记交互
 ├── assets/                  # 图片与视觉素材
 ├── GUIDE.zh-CN.md           # 零基础定制与部署教程
+├── RSVP_BACKEND.zh-CN.md    # 用第三方表单接入真实后台宾客管理
 ├── SHARE.zh-CN.md           # 分享给亲朋好友的完整教程
 ├── AI_PUBLISH_GUIDE.zh-CN.md  # 用 AI 工具一句话生成分享网址
 ├── COPYRIGHT_NOTICE.md      # 版权边界与降低风险建议
