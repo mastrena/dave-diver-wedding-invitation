@@ -1,0 +1,8 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "blue-hole-wedding-invitation",
+  "compatibility_date": "2026-09-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "pages_build_output_dir": "./",
+  "observability": { "enabled": true, "head_sampling_rate": 1 }
+}

@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#041a33" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>蓝洞任务终端｜宾客管理</title>
+    <link rel="icon" type="image/png" href="/assets/wedding-invitation-logo.png" />
+    <link rel="stylesheet" href="/admin/admin.css" />
+  </head>
+  <body>
+    <main class="admin-shell">
+      <div class="bubble-field" aria-hidden="true"></div>
+
+      <section class="login-view" id="login-view">
+        <div class="login-signal" aria-hidden="true"><i></i><i></i><i></i></div>
+        <div class="login-card">
+          <img src="/assets/wedding-invitation-logo.png" alt="蓝洞婚礼" class="login-logo" />
+          <p class="eyebrow">BLUE HOLE · HOST CONSOLE</p>
+          <h1>宾客任务终端</h1>
+          <p class="login-copy">查看赴约信息、安排住宿，并将名单带去婚礼现场。</p>
+          <form id="login-form">
+            <label>
+              <span>管理口令</span>
+              <input name="password" type="password" autocomplete="current-password" maxlength="128" placeholder="输入主办人密码" required autofocus />
+            </label>
+            <p class="form-message" id="login-error" role="alert" hidden></p>
+            <button class="primary-button" type="submit"><span>🔑</span> 进入任务终端</button>
+          </form>
+          <button class="demo-button" id="demo-button" type="button">先看看演示数据 →</button>
+        </div>
+        <p class="login-footnote">PRIVATE TERMINAL · 宾客信息仅供主办人查看</p>
+      </section>
+
+      <section class="dashboard-view" id="dashboard-view" hidden>
+        <header class="topbar">
+          <a class="brand" href="/" aria-label="返回婚礼请柬">
+            <img src="/assets/wedding-invitation-logo.png" alt="" />
+            <span><b>BLUE HOLE</b><small>HOST TERMINAL</small></span>
+          </a>
+          <div class="topbar-actions">
+            <span class="demo-pill" id="demo-pill" hidden>演示数据</span>
+            <button class="icon-button" id="logout-button" type="button" aria-label="退出后台">↪</button>
+          </div>
+        </header>
+
+        <section class="console-title">
+          <div>
+            <p>MISSION CONTROL / RSVP ARCHIVE</p>
+            <h1>宾客管理中心</h1>
+            <span id="last-updated">正在连接蓝洞数据站…</span>
+          </div>
+          <img src="/assets/dave-dive.webp" alt="潜入蓝洞的潜水员" />
+        </section>
+
+        <section class="stats-grid" aria-label="宾客统计">
+          <article class="stat-card replies"><span>登记任务</span><strong id="stat-replies">0</strong><small>份答复</small></article>
+          <article class="stat-card guests"><span>预计赴约</span><strong id="stat-guests">0</strong><small>位宾客</small></article>
+          <article class="stat-card beds"><span>住宿安排</span><strong id="stat-accommodation">0</strong><small>份需求</small></article>
+        </section>
+
+        <section class="operations-panel">
+          <div class="filters">
+            <label class="search-box"><span>⌕</span><input id="search-input" type="search" placeholder="搜索姓名、电话或留言" /></label>
+            <label class="select-box"><span>住宿</span><select id="accommodation-filter"><option value="all">全部</option><option value="yes">需要住宿</option><option value="no">无需住宿</option></select></label>
+          </div>
+          <div class="operations-actions">
+            <button class="secondary-button" id="refresh-button" type="button">↻ 刷新</button>
+            <button class="primary-button export-button" id="export-button" type="button">⇩ 导出 Excel</button>
+          </div>
+        </section>
+
+        <p class="form-message dashboard-message" id="dashboard-error" role="alert" hidden></p>
+        <p class="result-line" id="result-line">正在读取宾客任务…</p>
+        <section class="guest-list" id="guest-list" aria-live="polite"></section>
+        <section class="empty-state" id="empty-state" hidden>
+          <b>◌</b><h2>等待第一份任务登记</h2><p>宾客提交赴约信息后，会自动出现在这里。</p>
+        </section>
+      </section>
+    </main>
+    <script type="module" src="/admin/admin.js"></script>
+  </body>
+</html>
